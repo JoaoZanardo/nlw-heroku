@@ -7,7 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd --exit-child src/server.ts",
+    "start": "node -e ts,json server.ts",
     "dev:prod": "node build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
