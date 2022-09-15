@@ -34,6 +34,17 @@ app.get('/games/:id/ads', async (req, res) => {
         msg: 'Inválid game id'
     });
 
+    const game = await prisma.game.findFirst({
+        where: {
+            id: gameId
+        }
+    });
+    if (!game) return res.status(404).send({
+        error: 'NOT FOUND',
+        msg: 'Game not found'
+    });
+
+
     const ads = await prisma.ad.findMany({
         select: {
             id: true,
@@ -52,6 +63,7 @@ app.get('/games/:id/ads', async (req, res) => {
             created_at: 'desc'
         }
     });
+
 
     res.status(200).json(ads.map(ad => {
         return {
