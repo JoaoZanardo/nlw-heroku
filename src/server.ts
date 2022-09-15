@@ -29,6 +29,10 @@ app.get('/games', async (req, res) => {
 
 app.get('/games/:id/ads', async (req, res) => {
     const gameId = req.params.id;
+    if (gameId.length !== 24) return res.status(400).send({
+        error: 'BAD REQUEST',
+        msg: 'Inválid game id'
+    });
 
     const ads = await prisma.ad.findMany({
         select: {
@@ -61,6 +65,11 @@ app.get('/games/:id/ads', async (req, res) => {
 
 app.get('/ads/:id/discord', async (req, res) => {
     const id = req.params.id;
+    if (id.length !== 24) return res.status(400).send({
+        error: 'BAD REQUEST',
+        msg: 'Inválid ad id'
+    });
+
     const ad = await prisma.ad.findFirst({
         select: {
             discord: true
@@ -90,6 +99,11 @@ interface AdBody {
 
 app.post('/games/:id/ads', async (req, res) => {
     const gameId = req.params.id;
+    if (gameId.length !== 24) return res.status(400).send({
+        error: 'BAD REQUEST',
+        msg: 'Inválid game id'
+    });
+
     const game = await prisma.game.findFirst({
         where: {
             id: gameId
@@ -98,7 +112,7 @@ app.post('/games/:id/ads', async (req, res) => {
 
     if (!game) return res.status(404).send({
         error: 'NOT FOUND',
-        msg: 'Ad not found'
+        msg: 'Game not found'
     });
 
     const {
