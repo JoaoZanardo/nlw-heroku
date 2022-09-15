@@ -2,23 +2,24 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongodb"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Game {
-  id        String @id @default(uuid())
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   bannerUrl String
   Ad        Ad[]
 }
 
 model Ad {
-  id              String   @id @default(uuid())
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
   gameId          String
   name            String
   yearsPlaying    Int
