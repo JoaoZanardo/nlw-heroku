@@ -126,4 +126,4 @@ app.post('/games/:id/ads', async (req, res) => {
     res.status(201).json(ad);
 });
 
-app.listen(3000 || process.env.PORT);
+app.listen(process.env.PORT || 3000);
