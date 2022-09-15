@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { convertHourStringToMinutes } from './utils/convert-hour-string-to-minutes';
 import { convertMinutesToHourString } from './utils/convert-minutes-to-hour-string';
 import cors from 'cors';
+import { AdBody } from './interfaces/create-ad.dto';
+import { validBody } from './utils/valid-body';
 const prisma = new PrismaClient();
 
 const app = express();
@@ -98,16 +100,6 @@ app.get('/ads/:id/discord', async (req, res) => {
     res.status(200).json(ad);
 });
 
-interface AdBody {
-    name: string
-    yearsPlaying: number
-    discord: string
-    weekDays: number[]
-    hourStart: string
-    hourEnd: string
-    useVoiceChannel: boolean
-}
-
 app.post('/games/:id/ads', async (req, res) => {
     const gameId = req.params.id;
     if (gameId.length !== 24) return res.status(400).send({
@@ -124,6 +116,12 @@ app.post('/games/:id/ads', async (req, res) => {
     if (!game) return res.status(404).send({
         error: 'NOT FOUND',
         msg: 'Game not found'
+    });
+
+    const { status, msg } = validBody(req.body);
+    if (status === 400) return res.status(400).send({
+        error: 'BAD REQUEST',
+        msg
     });
 
     const {
